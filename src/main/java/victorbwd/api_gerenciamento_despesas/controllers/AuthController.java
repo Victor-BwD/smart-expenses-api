@@ -28,9 +28,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body) {
-        User user = this.userRepository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        User user = this.userRepository.findByEmail(body.email()).orElseThrow(() -> new IllegalArgumentException("User Not Found"));
         if (!passwordEncoder.matches(body.password(), user.getPassword())) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Invalid e-mail or password");
         }
 
         String token = this.tokenService.generateToken(user);
@@ -41,7 +41,7 @@ public class AuthController {
     public ResponseEntity register(@RequestBody RegisterRequestDTO body) {
         Optional<User> user = this.userRepository.findByEmail(body.email());
         if(user.isPresent()) {
-            return ResponseEntity.badRequest().body("User already exists");
+            throw new IllegalArgumentException("User already exists");
         }
 
         User newUser = new User();
