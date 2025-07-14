@@ -9,6 +9,7 @@ import victorbwd.api_gerenciamento_despesas.domain.category.Category;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,7 +38,7 @@ public class Expenses {
     private String description;
 
     @Column(nullable = false)
-    private String date; // Format: YYYY-MM-DD
+    private LocalDate date; // Format: YYYY-MM-DD
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
