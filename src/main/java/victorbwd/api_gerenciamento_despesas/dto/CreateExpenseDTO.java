@@ -1,7 +1,5 @@
 package victorbwd.api_gerenciamento_despesas.dto;
 
-import victorbwd.api_gerenciamento_despesas.domain.user.User;
-
 import java.util.Date;
 import java.util.UUID;
 
