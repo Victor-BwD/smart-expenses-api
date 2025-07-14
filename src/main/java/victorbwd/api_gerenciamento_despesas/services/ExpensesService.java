@@ -41,7 +41,7 @@ public class ExpensesService {
         expenses.setDescription(dto.description());
         expenses.setUser(user);
         expenses.setCategory(category);
-        expenses.setDate(LocalDate.now());
+        expenses.setDate(dto.date() != null ? dto.date() : LocalDate.now());
         expenses.setCreatedAt(LocalDate.now().atStartOfDay());
         expenses.setUpdatedAt(LocalDate.now().atStartOfDay());
 
