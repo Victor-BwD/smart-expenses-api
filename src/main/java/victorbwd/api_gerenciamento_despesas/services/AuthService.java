@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
+import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
 
 import java.util.UUID;
@@ -43,5 +44,10 @@ public class AuthService {
         }
 
         throw new RuntimeException("Cannot extract user identity safely");
+    }
+
+    public User getUserById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }
