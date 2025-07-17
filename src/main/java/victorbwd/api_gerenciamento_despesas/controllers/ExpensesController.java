@@ -6,12 +6,15 @@ import org.springframework.web.bind.annotation.*;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
+import victorbwd.api_gerenciamento_despesas.dto.ExpenseFilterDTO;
 import victorbwd.api_gerenciamento_despesas.dto.ExpenseResponseDTO;
+import victorbwd.api_gerenciamento_despesas.dto.PagedExpenseResponseDTO;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.services.AuthService;
 import victorbwd.api_gerenciamento_despesas.services.ExpensesService;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,5 +64,34 @@ public class ExpensesController {
         )).toList();
 
         return ResponseEntity.ok(expensesDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<PagedExpenseResponseDTO> listExpenses(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String description,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            Authentication auth) {
+
+        UUID userId = authService.extractUserIdFromAuth(auth);
+        if (userId == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        User user = authService.getUserById(userId);
+
+        ExpenseFilterDTO filters = new ExpenseFilterDTO(
+                startDate,
+                endDate,
+                categoryId,
+                description,
+                page,
+                limit
+        );
+
+        PagedExpenseResponseDTO response = expensesService.listExpenses(filters, user.getId());
+        return ResponseEntity.ok(response);
     }
 }

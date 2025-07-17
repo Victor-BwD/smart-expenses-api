@@ -13,10 +13,10 @@ import java.util.UUID;
 public interface ExpensesRepository extends JpaRepository<Expenses, Long> {
 
     @Query("SELECT e FROM Expenses e WHERE e.user.id = :userId " +
-            "AND (:startDate IS NULL OR e.date >= :startDate) " +
-            "AND (:endDate IS NULL OR e.date <= :endDate) " +
-            "AND (:categoryId IS NULL OR e.category.id = :categoryId) " +
-            "AND (:description IS NULL OR UPPER(e.description) LIKE UPPER(CONCAT('%', :description, '%')))")
+            "AND (CAST(:startDate AS date) IS NULL OR e.date >= :startDate) " +
+            "AND (CAST(:endDate AS date) IS NULL OR e.date <= :endDate) " +
+            "AND (CAST(:categoryId AS long) IS NULL OR e.category.id = :categoryId) " +
+            "AND (CAST(:description AS string) IS NULL OR :description = '' OR LOWER(e.description) LIKE LOWER(CONCAT('%', :description, '%')))")
     Page<Expenses> findExpensesWithFilters(
             @Param("userId") UUID userId,
             @Param("startDate") LocalDate startDate,
