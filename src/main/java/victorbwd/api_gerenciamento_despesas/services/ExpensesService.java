@@ -79,12 +79,20 @@ public class ExpensesService {
         return new PagedExpenseResponseDTO(
                 expensesDTOs,
                 expensePage.getTotalElements(),
-                expensePage.getTotalPages(),
                 expensePage.getNumber(),
+                expensePage.getSize(),
                 expensePage.hasNext(),
                 expensePage.hasPrevious()
         );
 
+    }
+
+    public ExpenseResponseDTO getById(Integer id, UUID userId) {
+
+        Expenses expense = expensesRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        return convertToResponseDTO(expense);
     }
 
     private ExpenseResponseDTO convertToResponseDTO(Expenses expense) {

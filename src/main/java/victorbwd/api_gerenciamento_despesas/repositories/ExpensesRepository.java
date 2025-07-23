@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
+import victorbwd.api_gerenciamento_despesas.dto.ExpenseResponseDTO;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ExpensesRepository extends JpaRepository<Expenses, Long> {
@@ -25,4 +27,6 @@ public interface ExpensesRepository extends JpaRepository<Expenses, Long> {
             @Param("description") String description,
             Pageable pageable
             );
+
+    Optional<Expenses> findByIdAndUserId(Integer id, UUID userId);
 }

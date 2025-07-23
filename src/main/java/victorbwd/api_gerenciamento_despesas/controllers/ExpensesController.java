@@ -66,6 +66,23 @@ public class ExpensesController {
         return ResponseEntity.ok(expensesDTO);
     }
 
+    @GetMapping(value ="/expense/{id}")
+    public ResponseEntity<ExpenseResponseDTO> getById(@PathVariable Integer id, Authentication auth) {
+        UUID userId = authService.extractUserIdFromAuth(auth);
+        if (userId == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        User user = authService.getUserById(userId);
+
+        ExpenseResponseDTO expense = expensesService.getById(id, user.getId());
+
+        if (expense == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(expense);
+    }
+
     @GetMapping
     public ResponseEntity<PagedExpenseResponseDTO> listExpenses(
             @RequestParam(required = false) LocalDate startDate,
