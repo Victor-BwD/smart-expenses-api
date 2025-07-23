@@ -13,6 +13,7 @@ import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
 import victorbwd.api_gerenciamento_despesas.dto.ExpenseFilterDTO;
 import victorbwd.api_gerenciamento_despesas.dto.ExpenseResponseDTO;
 import victorbwd.api_gerenciamento_despesas.dto.PagedExpenseResponseDTO;
+import victorbwd.api_gerenciamento_despesas.exceptions.ExpenseNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.ExpensesRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
@@ -88,9 +89,8 @@ public class ExpensesService {
     }
 
     public ExpenseResponseDTO getById(Integer id, UUID userId) {
-
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new RuntimeException("Expense not found"));
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
         return convertToResponseDTO(expense);
     }
