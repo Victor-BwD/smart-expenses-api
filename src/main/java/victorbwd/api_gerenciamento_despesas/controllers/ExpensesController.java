@@ -112,9 +112,6 @@ public class ExpensesController {
             @RequestBody UpdateExpenseDTO dto,
             Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
-        if (userId == null) {
-            throw new UserNotFoundException("User not found");
-        }
         User user = authService.getUserById(userId);
 
         ExpenseResponseDTO updatedExpense = expensesService.update(id, dto, user.getId());
