@@ -100,6 +100,7 @@ public class ExpensesService {
         expense.setDescription(dto.description());
         expense.setAmount(BigDecimal.valueOf(dto.value()));
         expense.setCategory(category);
+        expense.setDate(dto.date());
         expense.setUpdatedAt(LocalDate.now().atStartOfDay());
         Expenses updatedExpense = expensesRepository.save(expense);
 

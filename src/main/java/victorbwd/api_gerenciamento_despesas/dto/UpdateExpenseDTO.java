@@ -1,9 +1,12 @@
 package victorbwd.api_gerenciamento_despesas.dto;
 
+import java.time.LocalDate;
+
 public record UpdateExpenseDTO(
         String description,
         Double value,
-        String category
+        String category,
+        LocalDate date
 ) {
     public UpdateExpenseDTO {
         if (description == null || description.isBlank()) {
