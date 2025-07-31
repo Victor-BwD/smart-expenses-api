@@ -11,6 +11,7 @@ import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.*;
 import victorbwd.api_gerenciamento_despesas.exceptions.ExpenseNotFoundException;
+import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.ExpensesRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
