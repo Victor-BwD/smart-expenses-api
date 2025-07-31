@@ -55,7 +55,7 @@ public class ExpensesService {
     }
 
     public PagedExpenseResponseDTO listExpenses(ExpenseFilterDTO filters, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Pageable pageable = PageRequest.of(
                 filters.page(),
