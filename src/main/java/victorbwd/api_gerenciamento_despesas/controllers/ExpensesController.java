@@ -5,10 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
-import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
-import victorbwd.api_gerenciamento_despesas.dto.ExpenseFilterDTO;
-import victorbwd.api_gerenciamento_despesas.dto.ExpenseResponseDTO;
-import victorbwd.api_gerenciamento_despesas.dto.PagedExpenseResponseDTO;
+import victorbwd.api_gerenciamento_despesas.dto.*;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.services.AuthService;
 import victorbwd.api_gerenciamento_despesas.services.ExpensesService;
@@ -110,5 +107,21 @@ public class ExpensesController {
 
         PagedExpenseResponseDTO response = expensesService.listExpenses(filters, user.getId());
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseResponseDTO> updateExpense(
+            @PathVariable Integer id,
+            @RequestBody UpdateExpenseDTO dto,
+            Authentication auth) {
+        UUID userId = authService.extractUserIdFromAuth(auth);
+        if (userId == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        User user = authService.getUserById(userId);
+
+        ExpenseResponseDTO updatedExpense = expensesService.update(id, dto, user.getId());
+
+        return ResponseEntity.ok(updatedExpense);
     }
 }

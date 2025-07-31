@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import victorbwd.api_gerenciamento_despesas.domain.category.Category;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
-import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
-import victorbwd.api_gerenciamento_despesas.dto.ExpenseFilterDTO;
-import victorbwd.api_gerenciamento_despesas.dto.ExpenseResponseDTO;
-import victorbwd.api_gerenciamento_despesas.dto.PagedExpenseResponseDTO;
+import victorbwd.api_gerenciamento_despesas.dto.*;
 import victorbwd.api_gerenciamento_despesas.exceptions.ExpenseNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.ExpensesRepository;
@@ -93,6 +90,20 @@ public class ExpensesService {
                 .orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
         return convertToResponseDTO(expense);
+    }
+
+    public ExpenseResponseDTO update(Integer id, UpdateExpenseDTO dto, UUID userId) {
+        Expenses expense = expensesRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
+
+        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new RuntimeException("Category not found"));
+
+        expense.setDescription(dto.description());
+        expense.setAmount(BigDecimal.valueOf(dto.value()));
+        expense.setCategory(category);
+        expense.setUpdatedAt(LocalDate.now().atStartOfDay());
+        Expenses updatedExpense = expensesRepository.save(expense);
+
+        return convertToResponseDTO(updatedExpense);
     }
 
     private ExpenseResponseDTO convertToResponseDTO(Expenses expense) {
