@@ -66,9 +66,6 @@ public class ExpensesController {
     @GetMapping(value ="/expense/{id}")
     public ResponseEntity<ExpenseResponseDTO> getById(@PathVariable Integer id, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
-        if (userId == null) {
-            throw new UserNotFoundException("User not found");
-        }
         User user = authService.getUserById(userId);
 
         ExpenseResponseDTO expense = expensesService.getById(id, user.getId());
@@ -91,9 +88,6 @@ public class ExpensesController {
             Authentication auth) {
 
         UUID userId = authService.extractUserIdFromAuth(auth);
-        if (userId == null) {
-            throw new UserNotFoundException("User not found");
-        }
         User user = authService.getUserById(userId);
 
         ExpenseFilterDTO filters = new ExpenseFilterDTO(
@@ -115,9 +109,6 @@ public class ExpensesController {
             @RequestBody UpdateExpenseDTO dto,
             Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
-        if (userId == null) {
-            throw new UserNotFoundException("User not found");
-        }
         User user = authService.getUserById(userId);
 
         ExpenseResponseDTO updatedExpense = expensesService.update(id, dto, user.getId());

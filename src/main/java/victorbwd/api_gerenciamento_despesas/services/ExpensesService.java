@@ -37,7 +37,7 @@ public class ExpensesService {
 
     @Transactional
     public Expenses create(CreateExpenseDTO dto, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new RuntimeException("Category not found"));
 
@@ -55,7 +55,7 @@ public class ExpensesService {
     }
 
     public PagedExpenseResponseDTO listExpenses(ExpenseFilterDTO filters, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Pageable pageable = PageRequest.of(
                 filters.page(),
