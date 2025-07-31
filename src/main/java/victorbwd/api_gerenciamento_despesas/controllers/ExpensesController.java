@@ -64,7 +64,7 @@ public class ExpensesController {
     }
 
     @GetMapping(value ="/expense/{id}")
-    public ResponseEntity<ExpenseResponseDTO> getById(@PathVariable Integer id, Authentication auth) {
+    public ResponseEntity<ExpenseResponseDTO> getById(@PathVariable Long id, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
         User user = authService.getUserById(userId);
 
@@ -105,7 +105,7 @@ public class ExpensesController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponseDTO> updateExpense(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @RequestBody UpdateExpenseDTO dto,
             Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
@@ -117,7 +117,7 @@ public class ExpensesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteExpense(@PathVariable Integer id, Authentication auth) {
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
         if (userId == null) {
             throw new UserNotFoundException("User not found");

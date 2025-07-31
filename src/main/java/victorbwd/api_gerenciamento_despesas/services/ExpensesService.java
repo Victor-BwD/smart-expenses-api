@@ -86,14 +86,14 @@ public class ExpensesService {
 
     }
 
-    public ExpenseResponseDTO getById(Integer id, UUID userId) {
+    public ExpenseResponseDTO getById(Long id, UUID userId) {
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
         return convertToResponseDTO(expense);
     }
 
-    public ExpenseResponseDTO update(Integer id, UpdateExpenseDTO dto, UUID userId) {
+    public ExpenseResponseDTO update(Long id, UpdateExpenseDTO dto, UUID userId) {
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
         Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new RuntimeException("Category not found"));
@@ -108,7 +108,7 @@ public class ExpensesService {
         return convertToResponseDTO(updatedExpense);
     }
 
-    public void delete(Integer id, UUID userId) {
+    public void delete(Long id, UUID userId) {
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
