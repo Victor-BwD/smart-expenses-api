@@ -124,4 +124,17 @@ public class ExpensesController {
 
         return ResponseEntity.ok(updatedExpense);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable Integer id, Authentication auth) {
+        UUID userId = authService.extractUserIdFromAuth(auth);
+        if (userId == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        User user = authService.getUserById(userId);
+
+        expensesService.delete(id, user.getId());
+
+        return ResponseEntity.noContent().build();
+    }
 }

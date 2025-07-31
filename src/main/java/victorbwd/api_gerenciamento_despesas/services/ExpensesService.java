@@ -106,6 +106,13 @@ public class ExpensesService {
         return convertToResponseDTO(updatedExpense);
     }
 
+    public void delete(Integer id, UUID userId) {
+        Expenses expense = expensesRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
+
+        expensesRepository.delete(expense);
+    }
+
     private ExpenseResponseDTO convertToResponseDTO(Expenses expense) {
         return new ExpenseResponseDTO(
                 expense.getId(),
