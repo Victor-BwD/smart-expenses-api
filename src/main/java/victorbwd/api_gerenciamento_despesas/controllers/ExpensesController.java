@@ -91,9 +91,6 @@ public class ExpensesController {
             Authentication auth) {
 
         UUID userId = authService.extractUserIdFromAuth(auth);
-        if (userId == null) {
-            throw new UserNotFoundException("User not found");
-        }
         User user = authService.getUserById(userId);
 
         ExpenseFilterDTO filters = new ExpenseFilterDTO(
