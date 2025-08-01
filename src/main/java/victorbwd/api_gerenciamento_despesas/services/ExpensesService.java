@@ -10,6 +10,7 @@ import victorbwd.api_gerenciamento_despesas.domain.category.Category;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.*;
+import victorbwd.api_gerenciamento_despesas.exceptions.CategoryNotFoundException;
 import victorbwd.api_gerenciamento_despesas.exceptions.ExpenseNotFoundException;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
@@ -96,7 +97,7 @@ public class ExpensesService {
     public ExpenseResponseDTO update(Long id, UpdateExpenseDTO dto, UUID userId) {
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
-        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new CategoryNotFoundException("Category not found"));
 
         expense.setDescription(dto.description());
         expense.setAmount(BigDecimal.valueOf(dto.value()));
