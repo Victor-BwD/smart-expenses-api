@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
+import victorbwd.api_gerenciamento_despesas.exceptions.InvalidAuthenticationException;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
 
@@ -27,7 +28,7 @@ public class AuthService {
 
     private String extractEmailFromAuth(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) {
-            throw new RuntimeException("Authentication is not valid");
+            throw new InvalidAuthenticationException("Authentication is not valid");
         }
 
         Object principal = auth.getPrincipal();
