@@ -20,7 +20,7 @@ public class AuthService {
     public UUID extractUserIdFromAuth(Authentication auth) {
         String email = extractEmailFromAuth(auth);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return user.getId();
     }
