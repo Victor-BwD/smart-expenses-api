@@ -70,10 +70,6 @@ public class ExpensesController {
 
         ExpenseResponseDTO expense = expensesService.getById(id, user.getId());
 
-        if (expense == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok(expense);
     }
 

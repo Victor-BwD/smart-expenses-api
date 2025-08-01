@@ -41,7 +41,7 @@ public class ExpensesService {
     public Expenses create(CreateExpenseDTO dto, UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new CategoryNotFoundException("Category not found"));
 
         Expenses expenses = new Expenses();
 
