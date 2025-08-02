@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import victorbwd.api_gerenciamento_despesas.domain.category.Category;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
@@ -14,6 +15,7 @@ import victorbwd.api_gerenciamento_despesas.exceptions.CategoryNotFoundException
 import victorbwd.api_gerenciamento_despesas.exceptions.ExpenseNotFoundException;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
+import victorbwd.api_gerenciamento_despesas.repositories.specifications.ExpenseSpecifications;
 import victorbwd.api_gerenciamento_despesas.repositories.ExpensesRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
 
@@ -65,16 +67,18 @@ public class ExpensesService {
                 Sort.by(Sort.Direction.DESC, "date", "createdAt")
         );
 
-        Page<Expenses> expensePage = expensesRepository.findExpensesWithFilters(
-                user.getId(),
-                filters.startDate(),
-                filters.endDate(),
-                filters.categoryId(),
-                filters.description(),
-                pageable
-        );
+        Specification<Expenses> spec = Specification.allOf(ExpenseSpecifications.withUserId(userId))
+                .and(ExpenseSpecifications.withStartDate(filters.startDate()))
+                .and(ExpenseSpecifications.withEndDate(filters.endDate()))
+                .and(ExpenseSpecifications.withCategoryId(filters.categoryId()))
+                .and(ExpenseSpecifications.withDescription(filters.description()));
 
-        List<ExpenseResponseDTO> expensesDTOs = expensePage.getContent().stream().map(this::convertToResponseDTO).toList();
+        Page<Expenses> expensePage = expensesRepository.findAll(spec, pageable);
+
+        List<ExpenseResponseDTO> expensesDTOs = expensePage.getContent()
+                .stream()
+                .map(this::convertToResponseDTO)
+                .toList();
 
         return new PagedExpenseResponseDTO(
                 expensesDTOs,
