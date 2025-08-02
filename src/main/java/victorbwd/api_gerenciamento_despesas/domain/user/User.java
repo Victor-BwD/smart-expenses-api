@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
+
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,4 +24,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expenses> expenses;
 }

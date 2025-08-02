@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
+
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -23,6 +26,9 @@ public class Category {
     private String description;
 
     private String color; // Hexadecimal color code (e.g., "#FF5733")
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expenses> expenses;
 
     public Category(String name, String description, String color) {
         this.name = name;
