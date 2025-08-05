@@ -31,6 +31,9 @@ public class Category {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "is_default")
+    private Boolean isDefault = false;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expenses> expenses;
 
