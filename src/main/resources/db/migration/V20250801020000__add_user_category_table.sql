@@ -1,0 +1,3 @@
+ALTER TABLE categories
+ADD COLUMN user_id UUID,
+ADD COLUMN is_default BOOLEAN DEFAULT FALSE;

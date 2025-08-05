@@ -8,6 +8,7 @@ import lombok.Setter;
 import victorbwd.api_gerenciamento_despesas.domain.expenses.Expenses;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "categories")
@@ -26,6 +27,9 @@ public class Category {
     private String description;
 
     private String color; // Hexadecimal color code (e.g., "#FF5733")
+
+    @Column(name = "user_id")
+    private UUID userId;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expenses> expenses;

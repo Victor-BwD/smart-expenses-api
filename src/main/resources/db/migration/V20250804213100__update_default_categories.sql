@@ -1,0 +1,1 @@
+UPDATE categories SET is_default = TRUE WHERE user_id IS NULL;
