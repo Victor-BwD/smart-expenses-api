@@ -1,5 +1,6 @@
 package victorbwd.api_gerenciamento_despesas.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryDTO> create(@RequestBody CreateCategoryDTO dto, Authentication auth) {
+    public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CreateCategoryDTO dto, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
 
         Category categoryDTO = categoryService.create(dto, userId);

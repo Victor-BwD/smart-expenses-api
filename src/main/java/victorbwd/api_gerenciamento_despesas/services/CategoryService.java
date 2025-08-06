@@ -51,7 +51,7 @@ public class CategoryService {
         category.setDescription(dto.description());
         category.setColor(dto.color());
         category.setUser(user);
-        category.setIsDefault(dto.isDefault() != null ? dto.isDefault() : false);
+        category.setIsDefault(false);
 
         return categoryRepository.save(category);
     }
