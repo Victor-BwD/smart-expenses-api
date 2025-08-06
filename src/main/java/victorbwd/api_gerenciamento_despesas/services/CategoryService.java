@@ -3,31 +3,27 @@ package victorbwd.api_gerenciamento_despesas.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victorbwd.api_gerenciamento_despesas.domain.category.Category;
+import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.CategoryDTO;
+import victorbwd.api_gerenciamento_despesas.dto.CreateCategoryDTO;
+import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
+import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
+import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
-    public Category createCategory(String name, String description, String color, UUID userId) {
-        if (categoryRepository.existsByName(name)) {
-            throw new IllegalArgumentException("Category with this name already exists");
-        }
-
-        Category category = new Category();
-        category.setName(name);
-        category.setDescription(description);
-        category.setColor(color);
-        category.setUserId(userId);
-        category.setIsDefault(false);
-
-        return categoryRepository.save(category);
+    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository) {
+        this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     public List<CategoryDTO> getAllCategories(UUID userId) {
@@ -40,6 +36,23 @@ public class CategoryService {
         return categories.stream()
                 .map(this::convertToDTO)
                 .toList();
+    }
+
+    public Category create(CreateCategoryDTO dto, UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (categoryRepository.existsByName(dto.name())) {
+            throw new IllegalArgumentException("Category with this name already exists");
+        }
+
+        Category category = new Category();
+        category.setName(dto.name());
+        category.setDescription(dto.description());
+        category.setColor(dto.color());
+        category.setUser(user);
+        category.setIsDefault(dto.isDefault() != null ? dto.isDefault() : false);
+
+        return categoryRepository.save(category);
     }
 
     private CategoryDTO convertToDTO(Category category) {

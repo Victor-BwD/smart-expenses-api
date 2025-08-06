@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CategoryRepository extends JpaRepository<Category,Integer> {
-    @Query("SELECT ct FROM Category ct WHERE ct.userId = ?1 OR ct.isDefault = true")
+    @Query("SELECT ct FROM Category ct WHERE ct.user.id = ?1 OR ct.isDefault = true")
     List<Category> findByUserIdOrDefault(UUID userId);
 
     boolean existsByName(String name);
