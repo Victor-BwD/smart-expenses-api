@@ -7,6 +7,7 @@ import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.CategoryDTO;
 import victorbwd.api_gerenciamento_despesas.dto.CreateCategoryDTO;
 import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
+import victorbwd.api_gerenciamento_despesas.exceptions.CategoryNotFoundException;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
@@ -63,5 +64,21 @@ public class CategoryService {
                 category.getColor(),
                 category.getIsDefault()
         );
+    }
+
+    public void deleteCategory(Integer categoryId, UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (categoryOptional.isEmpty()) {
+            throw new CategoryNotFoundException("Category not found");
+        }
+
+        Category category = categoryOptional.get();
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new CategoryNotFoundException("Category not found");
+        }
+
+        categoryRepository.delete(category);
     }
 }

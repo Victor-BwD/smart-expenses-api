@@ -50,4 +50,11 @@ public class CategoryController {
 
         return ResponseEntity.created(uri).body(responseDTO);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable("id") Integer categoryId, Authentication auth) {
+        UUID userId = authService.extractUserIdFromAuth(auth);
+        categoryService.deleteCategory(categoryId, userId);
+        return ResponseEntity.noContent().build();
+    }
 }
