@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import victorbwd.api_gerenciamento_despesas.domain.category.Category;
 import victorbwd.api_gerenciamento_despesas.dto.CategoryDTO;
 import victorbwd.api_gerenciamento_despesas.dto.CreateCategoryDTO;
-import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
 import victorbwd.api_gerenciamento_despesas.services.AuthService;
 import victorbwd.api_gerenciamento_despesas.services.CategoryService;
 
