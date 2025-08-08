@@ -40,8 +40,10 @@ public class CategoryService {
     public Category create(CreateCategoryDTO dto, UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (categoryRepository.existsByName(dto.name())) {
-            throw new IllegalArgumentException("Category with this name already exists");
+        Boolean existingCategory = categoryRepository.existsByNameAndUserIdOrDefault(dto.name(), userId);
+
+        if (existingCategory) {
+            throw new IllegalArgumentException("Category with the same name already exists");
         }
 
         Category category = new Category();
