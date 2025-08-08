@@ -1,12 +1,10 @@
 package victorbwd.api_gerenciamento_despesas.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import victorbwd.api_gerenciamento_despesas.domain.category.Category;
 import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.CategoryDTO;
 import victorbwd.api_gerenciamento_despesas.dto.CreateCategoryDTO;
-import victorbwd.api_gerenciamento_despesas.dto.CreateExpenseDTO;
 import victorbwd.api_gerenciamento_despesas.exceptions.CategoryNotFoundException;
 import victorbwd.api_gerenciamento_despesas.exceptions.UserNotFoundException;
 import victorbwd.api_gerenciamento_despesas.repositories.CategoryRepository;
