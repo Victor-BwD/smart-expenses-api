@@ -75,6 +75,11 @@ public class CategoryService {
         }
 
         Category category = categoryOptional.get();
+
+        if (category.getUser() == null) {
+            throw new CategoryNotFoundException("Category not found");
+        }
+
         if (!category.getUser().getId().equals(user.getId())) {
             throw new CategoryNotFoundException("Category not found");
         }
