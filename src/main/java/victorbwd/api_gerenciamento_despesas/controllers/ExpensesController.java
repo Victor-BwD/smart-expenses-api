@@ -1,5 +1,6 @@
 package victorbwd.api_gerenciamento_despesas.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ExpensesController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ExpenseResponseDTO> createExpense(@RequestBody CreateExpenseDTO dto, Authentication auth) {
+    public ResponseEntity<ExpenseResponseDTO> createExpense(@Valid @RequestBody CreateExpenseDTO dto, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
         Expenses expenses = expensesService.create(dto, userId);
 
