@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CategorizationRuleRepository extends JpaRepository<CategorizationRules, Long> {
 
-    List<CategorizationRules> findByUserOrderByPriorityDesc(User user);
+    List<CategorizationRules> findByUserOrderByPriorityAsc(User user);
 }

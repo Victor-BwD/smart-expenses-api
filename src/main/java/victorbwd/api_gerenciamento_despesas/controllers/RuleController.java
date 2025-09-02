@@ -30,18 +30,10 @@ public class RuleController {
     @PostMapping
     public ResponseEntity<RuleResponseDTO> createRule(@RequestBody @Valid RuleRequestsDTO dto, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
-        RuleResponseDTO createRule = ruleService.createRule(dto, userId);
+        RuleResponseDTO createdRule = ruleService.createRule(dto, userId);
 
-        URI uri = URI.create("/rules/" + createRule.id());
+        URI uri = URI.create("/rules/" + createdRule.id());
 
-        RuleResponseDTO responseDTO = new RuleResponseDTO(
-                createRule.id(),
-                createRule.keyword(),
-                createRule.categoryId(),
-                createRule.categoryName(),
-                createRule.priority()
-        );
-
-        return ResponseEntity.created(uri).body(responseDTO);
+        return ResponseEntity.created(uri).body(createdRule);
     }
 }
