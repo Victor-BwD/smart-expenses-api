@@ -15,8 +15,5 @@ public record UpdateExpenseDTO(
         if (value == null || value <= 0) {
             throw new IllegalArgumentException("Value must be a positive number");
         }
-        if (category == null || category.isBlank()) {
-            throw new IllegalArgumentException("Category cannot be null or blank");
-        }
     }
 }

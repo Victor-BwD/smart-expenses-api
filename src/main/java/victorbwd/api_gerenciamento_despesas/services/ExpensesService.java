@@ -29,11 +29,13 @@ public class ExpensesService {
     private final ExpensesRepository expensesRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CategorizationEngineService categorizationEngineService;
 
 
     public ExpensesService(ExpensesRepository expensesRepository,
                            UserRepository userRepository,
-                           CategoryRepository categoryRepository) {
+                           CategoryRepository categoryRepository, CategorizationEngineService categorizationEngineService) {
+        this.categorizationEngineService = categorizationEngineService;
         this.expensesRepository = expensesRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
@@ -43,17 +45,24 @@ public class ExpensesService {
     public Expenses create(CreateExpenseDTO dto, UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+
 
         Expenses expenses = new Expenses();
 
         expenses.setAmount(BigDecimal.valueOf(dto.value()));
         expenses.setDescription(dto.description());
         expenses.setUser(user);
-        expenses.setCategory(category);
         expenses.setDate(dto.date() != null ? dto.date() : LocalDate.now());
         expenses.setCreatedAt(LocalDate.now().atStartOfDay());
         expenses.setUpdatedAt(LocalDate.now().atStartOfDay());
+
+        if(dto.category() != null && !dto.category().isBlank()) {
+            Category category = categoryRepository.findByName(dto.category())
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+            expenses.setCategory(category);
+        } else {
+            categorizationEngineService.findCategoryForRule(expenses).ifPresent(expenses::setCategory);
+        }
 
         return expensesRepository.save(expenses);
     }
@@ -101,13 +110,25 @@ public class ExpensesService {
     public ExpenseResponseDTO update(Long id, UpdateExpenseDTO dto, UUID userId) {
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
-        Category category = categoryRepository.findByName(dto.category()).orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+
 
         expense.setDescription(dto.description());
         expense.setAmount(BigDecimal.valueOf(dto.value()));
-        expense.setCategory(category);
         expense.setDate(dto.date());
         expense.setUpdatedAt(LocalDate.now().atStartOfDay());
+
+        if (dto.category() != null && !dto.category().isBlank()) {
+            Category category = categoryRepository.findByName(dto.category())
+                    .orElseThrow(() -> new CategoryNotFoundException("Category '" + dto.category() + "' not found"));
+            expense.setCategory(category);
+        }
+        else {
+            expense.setCategory(null);
+
+            categorizationEngineService.findCategoryForRule(expense)
+                    .ifPresent(expense::setCategory);
+        }
+
         Expenses updatedExpense = expensesRepository.save(expense);
 
         return convertToResponseDTO(updatedExpense);
@@ -121,11 +142,13 @@ public class ExpensesService {
     }
 
     private ExpenseResponseDTO convertToResponseDTO(Expenses expense) {
+        String categoryName = expense.getCategory() != null ? expense.getCategory().getName() : null;
+
         return new ExpenseResponseDTO(
                 expense.getId(),
                 expense.getDescription(),
                 expense.getAmount(),
-                expense.getCategory().getName(),
+                categoryName,
                 expense.getDate(),
                 expense.getUser().getName()
         );
