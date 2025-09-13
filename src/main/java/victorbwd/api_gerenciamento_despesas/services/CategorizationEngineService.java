@@ -20,7 +20,7 @@ public class CategorizationEngineService {
     public Optional<Category> findCategoryForRule(Expenses expense) {
         List<CategorizationRules> userRules = ruleRepository.findByUserOrderByPriorityAsc(expense.getUser());
 
-        String descriptionLowerCase = expense.getDescription().toLowerCase();
+        String descriptionLowerCase = expense.getDescription() == null ? "" : expense.getDescription().toLowerCase();
 
         for(CategorizationRules rule : userRules) {
             if(descriptionLowerCase.contains(rule.getKeyword().toLowerCase())) {
