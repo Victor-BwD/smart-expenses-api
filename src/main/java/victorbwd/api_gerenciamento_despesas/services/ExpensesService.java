@@ -155,13 +155,7 @@ public class ExpensesService {
     }
 
     public List<Expenses> recategorizeExpenses(RecategorizeRequestDTO dto, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         List<Expenses> expenses = expensesRepository.findAllById(dto.expenseIds());
-
-        System.out.println("--- INICIANDO DEBUG ---");
-        System.out.println("Tentando encontrar Category ID: " + dto.categoryId());
-        System.out.println("Para o User ID: " + userId);
-        System.out.println("-----------------------");
 
         boolean hasInvalidExpenses = expenses.size() != dto.expenseIds().size() ||
                 !expenses.stream().allMatch(exp -> exp.getUser().getId().equals(userId));
