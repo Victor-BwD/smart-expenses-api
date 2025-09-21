@@ -119,7 +119,7 @@ public class ExpensesService {
 
         if (dto.category() != null && !dto.category().isBlank()) {
             Category category = categoryRepository.findByName(dto.category())
-                    .orElseThrow(() -> new CategoryNotFoundException("Category '" + dto.category() + "' not found"));
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
             expense.setCategory(category);
         }
         else {
