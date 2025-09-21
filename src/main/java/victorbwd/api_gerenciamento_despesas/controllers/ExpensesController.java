@@ -1,5 +1,6 @@
 package victorbwd.api_gerenciamento_despesas.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/expenses")
@@ -27,7 +29,7 @@ public class ExpensesController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ExpenseResponseDTO> createExpense(@RequestBody CreateExpenseDTO dto, Authentication auth) {
+    public ResponseEntity<ExpenseResponseDTO> createExpense(@Valid @RequestBody CreateExpenseDTO dto, Authentication auth) {
         UUID userId = authService.extractUserIdFromAuth(auth);
         Expenses expenses = expensesService.create(dto, userId);
 
@@ -123,5 +125,31 @@ public class ExpensesController {
         expensesService.delete(id, user.getId());
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/recategorize")
+    public ResponseEntity<List<ExpenseResponseDTO>> recategorize(@RequestBody @Valid RecategorizeRequestDTO dto, Authentication auth) {
+        UUID userId = authService.extractUserIdFromAuth(auth);
+        if (userId == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        User user = authService.getUserById(userId);
+
+        List<Expenses> updatedExpenses = expensesService.recategorizeExpenses(dto, user.getId());
+
+        List<ExpenseResponseDTO> response = updatedExpenses.stream().map(this::convertToDto).collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
+
+    private ExpenseResponseDTO convertToDto(Expenses expense) {
+        return new ExpenseResponseDTO(
+                expense.getId(),
+                expense.getDescription(),
+                expense.getAmount(),
+                expense.getCategory().getName(),
+                expense.getDate(),
+                expense.getUser().getName()
+        );
     }
 }

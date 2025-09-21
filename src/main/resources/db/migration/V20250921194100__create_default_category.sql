@@ -1,0 +1,1 @@
+INSERT INTO categories (name, color, is_default, user_id) VALUES ('Sem Categoria', '#FFFFFF', true, null);
