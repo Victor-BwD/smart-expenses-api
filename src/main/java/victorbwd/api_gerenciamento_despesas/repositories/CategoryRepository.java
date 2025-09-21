@@ -17,4 +17,7 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
     boolean existsByNameAndUserIdOrDefault(@Param("name") String name, @Param("userId") UUID userId);
 
     Optional<Category> findByName(String name);
+
+    @Query("SELECT c FROM Category c WHERE c.id = :categoryId AND (c.user.id = :userId OR c.user IS NULL)")
+    Optional<Category> findByIdForUserOrDefault(@Param("categoryId") Integer categoryId, @Param("userId") UUID userId);
 }

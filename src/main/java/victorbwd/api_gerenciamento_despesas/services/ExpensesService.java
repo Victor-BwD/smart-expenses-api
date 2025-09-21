@@ -153,4 +153,39 @@ public class ExpensesService {
                 expense.getUser().getName()
         );
     }
+
+    public List<Expenses> recategorizeExpenses(RecategorizeRequestDTO dto, UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        List<Expenses> expenses = expensesRepository.findAllById(dto.expenseIds());
+
+        System.out.println("--- INICIANDO DEBUG ---");
+        System.out.println("Tentando encontrar Category ID: " + dto.categoryId());
+        System.out.println("Para o User ID: " + userId);
+        System.out.println("-----------------------");
+
+        boolean hasInvalidExpenses = expenses.size() != dto.expenseIds().size() ||
+                !expenses.stream().allMatch(exp -> exp.getUser().getId().equals(userId));
+
+        if(hasInvalidExpenses){
+            throw new ExpenseNotFoundException("One or more expenses not found for the user");
+        }
+
+        if (dto.categoryId() != null) {
+            Category targetCategory = categoryRepository.findByIdForUserOrDefault(dto.categoryId().intValue(), userId).orElseThrow(
+                    () -> new CategoryNotFoundException("Category not found")
+            );
+
+            expenses.forEach(expense -> {
+                expense.setCategory(targetCategory);
+            });
+        }else{
+            expenses.forEach(expense -> {
+                expense.setCategory(null);
+                categorizationEngineService.findCategoryForRule(expense).ifPresent(expense::setCategory);
+            });
+        }
+
+        return expensesRepository.saveAll(expenses);
+
+    }
 }
