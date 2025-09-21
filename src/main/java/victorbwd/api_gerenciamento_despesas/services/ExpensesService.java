@@ -117,6 +117,7 @@ public class ExpensesService {
         return convertToResponseDTO(expense);
     }
 
+    @Transactional
     public ExpenseResponseDTO update(Long id, UpdateExpenseDTO dto, UUID userId) {
         Expenses expense = expensesRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
 
