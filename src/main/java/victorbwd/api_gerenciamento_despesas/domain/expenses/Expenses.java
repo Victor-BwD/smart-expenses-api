@@ -45,4 +45,7 @@ public class Expenses {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Version
+    private Long version;
 }

@@ -21,6 +21,7 @@ import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 
@@ -61,7 +62,16 @@ public class ExpensesService {
                     .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
             expenses.setCategory(category);
         } else {
-            categorizationEngineService.findCategoryForRule(expenses).ifPresent(expenses::setCategory);
+
+            Optional<Category> foundCategory = categorizationEngineService.findCategoryForRule(expenses);
+
+            if (foundCategory.isPresent()) {
+                expenses.setCategory(foundCategory.get());
+            } else {
+                Category defaultCategory = categoryRepository.findByName("Sem Categoria")
+                        .orElseThrow(() -> new RuntimeException("Categoria padrão 'Sem Categoria' não encontrada no banco de dados."));
+                expenses.setCategory(defaultCategory);
+            }
         }
 
         return expensesRepository.save(expenses);
