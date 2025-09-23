@@ -36,4 +36,16 @@ public class ReportController {
 
         return ResponseEntity.ok(summary);
     }
+
+    @GetMapping("/summary/by-period" )
+    public ResponseEntity<?> getPeriodSummary(@RequestParam("periodType") String periodType,
+                                              @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                              Authentication auth) {
+
+        UUID userId = authService.extractUserIdFromAuth(auth);
+
+        var summary = reportService.getSummaryByPeriod(periodType, userId, startDate, endDate);
+        return ResponseEntity.ok(summary);
+    }
 }
