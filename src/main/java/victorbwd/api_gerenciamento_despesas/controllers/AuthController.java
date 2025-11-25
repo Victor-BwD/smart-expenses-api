@@ -11,6 +11,7 @@ import victorbwd.api_gerenciamento_despesas.domain.user.User;
 import victorbwd.api_gerenciamento_despesas.dto.LoginRequestDTO;
 import victorbwd.api_gerenciamento_despesas.dto.RegisterRequestDTO;
 import victorbwd.api_gerenciamento_despesas.dto.ResponseDTO;
+import victorbwd.api_gerenciamento_despesas.exceptions.UserAlreadyExistsException;
 import victorbwd.api_gerenciamento_despesas.infra.security.TokenService;
 import victorbwd.api_gerenciamento_despesas.repositories.UserRepository;
 
@@ -41,7 +42,7 @@ public class AuthController {
     public ResponseEntity register(@RequestBody RegisterRequestDTO body) {
         Optional<User> user = this.userRepository.findByEmail(body.email());
         if(user.isPresent()) {
-            throw new IllegalArgumentException("User already exists");
+            throw new UserAlreadyExistsException("User already exists");
         }
 
         User newUser = new User();
