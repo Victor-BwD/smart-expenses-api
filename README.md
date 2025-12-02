@@ -1,6 +1,6 @@
 # ☕ Smart Expenses API
 
-![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-green) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue) ![Flyway](https://img.shields.io/badge/Flyway-Migration-red) ![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-green) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue) ![Flyway](https://img.shields.io/badge/Flyway-Migration-red) ![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
 
 > A robust, high-performance REST API for intelligent personal finance management, built with the latest Java standards.
 
@@ -20,7 +20,7 @@ Built to be production-ready, this project leverages the power of **Java 21** an
 
 ## 🛠️ Tech Stack
 
-- **Language:** Java 21 (LTS) - Utilizing Records, Pattern Matching, and Virtual Threads (if applicable).
+- **Language:** Java 21 (LTS).
 - **Framework:** Spring Boot 3.x (Web, Security, Data JPA).
 - **Database:** PostgreSQL.
 - **Migrations:** Flyway.
