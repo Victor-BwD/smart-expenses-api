@@ -45,7 +45,7 @@ class AuthControllerTest {
         when(passwordEncoder.matches("123", "encoded")).thenReturn(true);
         when(tokenService.generateToken(user)).thenReturn("token");
 
-        ResponseEntity response = controller.login(new LoginRequestDTO("victor@mail.com", "123"));
+        ResponseEntity<?> response = controller.login(new LoginRequestDTO("victor@mail.com", "123"));
 
         ResponseDTO body = (ResponseDTO) response.getBody();
         assertEquals(200, response.getStatusCode().value());
@@ -80,7 +80,7 @@ class AuthControllerTest {
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(tokenService.generateToken(any(User.class))).thenReturn("token");
 
-        ResponseEntity response = controller.register(new RegisterRequestDTO("Victor", "new@mail.com", "123"));
+        ResponseEntity<?> response = controller.register(new RegisterRequestDTO("Victor", "new@mail.com", "123"));
 
         ResponseDTO body = (ResponseDTO) response.getBody();
         assertEquals(200, response.getStatusCode().value());
