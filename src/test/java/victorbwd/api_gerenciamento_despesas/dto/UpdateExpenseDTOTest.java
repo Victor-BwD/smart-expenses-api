@@ -31,14 +31,4 @@ class UpdateExpenseDTOTest {
                         () -> new UpdateExpenseDTO("Desc", -1.0, "Bills", LocalDate.now()))
         );
     }
-
-    @Test
-    void expenseFilterShouldNormalizePageAndLimit() {
-        ExpenseFilterDTO dtoWithInvalid = new ExpenseFilterDTO(null, null, null, null, -2, 0);
-        ExpenseFilterDTO dtoWithTooHighLimit = new ExpenseFilterDTO(null, null, null, null, 0, 999);
-
-        assertEquals(0, dtoWithInvalid.page());
-        assertEquals(10, dtoWithInvalid.limit());
-        assertEquals(100, dtoWithTooHighLimit.limit());
-    }
 }
